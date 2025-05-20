@@ -159,12 +159,6 @@
             color: white;
         }
 
-        .btn-sincronizar {
-            background-color: var(--rosa-oscuro);
-            color: white;
-            margin-left: 5px;
-        }
-
         .btn:hover {
             opacity: 0.9;
             transform: translateY(-1px);
@@ -270,9 +264,6 @@
             
             <button id="aplicarFiltros">Aplicar Filtros</button>
             <button id="exportarCSV">Exportar a CSV</button>
-            <button id="exportarDatos">Exportar Datos</button>
-            <button id="importarDatos">Importar Datos</button>
-            <input type="file" id="importarArchivo" accept=".json" style="display: none;">
         </div>
         
         <table id="tablaCitas">
@@ -305,11 +296,6 @@
             // Configurar eventos de filtros
             document.getElementById('aplicarFiltros').addEventListener('click', cargarCitas);
             document.getElementById('exportarCSV').addEventListener('click', exportarCSV);
-            document.getElementById('exportarDatos').addEventListener('click', exportarDatos);
-            document.getElementById('importarDatos').addEventListener('click', function() {
-                document.getElementById('importarArchivo').click();
-            });
-            document.getElementById('importarArchivo').addEventListener('change', importarDatos);
         });
 
         // Función para cargar citas con filtros
@@ -340,7 +326,7 @@
             mostrarCitasEnTabla(citas);
             
             // Actualizar contador
-            document.getElementById('totalCitas').textContent = `Total de citas: ${citas.length}`;
+            document.getElementById('totalCitas').textContent = Total de citas: ${citas.length};
         }
 
         // Función para mostrar citas en la tabla
@@ -375,9 +361,9 @@
                     <td class="${claseEstado}">${cita.estado}</td>
                     <td>
                         ${cita.estado !== 'Confirmado' ? 
-                          `<button class="btn btn-confirmar" data-id="${cita.id}">Confirmar</button>` : ''}
+                          <button class="btn btn-confirmar" data-id="${cita.id}">Confirmar</button> : ''}
                         ${cita.estado !== 'Cancelado' ? 
-                          `<button class="btn btn-cancelar" data-id="${cita.id}">Cancelar</button>` : ''}
+                          <button class="btn btn-cancelar" data-id="${cita.id}">Cancelar</button> : ''}
                         <button class="btn btn-eliminar" data-id="${cita.id}">Eliminar</button>
                     </td>
                 `;
@@ -418,7 +404,7 @@
             localStorage.setItem('citasDSSpa', JSON.stringify(citas));
             cargarCitas();
             
-            alert(`Cita ${nuevoEstado.toLowerCase()} con éxito`);
+            alert(Cita ${nuevoEstado.toLowerCase()} con éxito);
         }
 
         // Función para eliminar una cita
@@ -438,7 +424,7 @@
         function formatearFecha(fechaStr) {
             if (!fechaStr) return '';
             const [anio, mes, dia] = fechaStr.split('-');
-            return `${dia}/${mes}/${anio}`;
+            return ${dia}/${mes}/${anio};
         }
 
         // Función para exportar a CSV
@@ -455,8 +441,8 @@
             
             // Datos
             citas.forEach(cita => {
-                csv += `"${cita.id}","${cita.nombre}","${cita.telefono}","${cita.terapeuta}",`;
-                csv += `"${cita.servicio}","${cita.fecha}","${cita.hora}","${cita.estado}","${cita.fechaRegistro}"\n`;
+                csv += "${cita.id}","${cita.nombre}","${cita.telefono}","${cita.terapeuta}",;
+                csv += "${cita.servicio}","${cita.fecha}","${cita.hora}","${cita.estado}","${cita.fechaRegistro}"\n;
             });
             
             // Crear archivo y descargar
@@ -464,57 +450,11 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.setAttribute('href', url);
-            link.setAttribute('download', `citas_dsara_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute('download', citas_dsara_${new Date().toISOString().slice(0,10)}.csv);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }
-
-        // Función para exportar datos (JSON)
-        function exportarDatos() {
-            const citas = JSON.parse(localStorage.getItem('citasDSSpa')) || [];
-            const dataStr = JSON.stringify(citas, null, 2);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            const exportName = 'citas_dsara_backup_' + new Date().toISOString().slice(0,10) + '.json';
-            
-            const linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportName);
-            linkElement.click();
-        }
-
-        // Función para importar datos (JSON)
-        function importarDatos(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const citas = JSON.parse(e.target.result);
-                    if (!Array.isArray(citas)) {
-                        throw new Error('El archivo no contiene datos válidos');
-                    }
-                    
-                    // Validar estructura básica de las citas
-                    const primeraCita = citas[0];
-                    if (!primeraCita || !primeraCita.id || !primeraCita.nombre || !primeraCita.fecha) {
-                        throw new Error('El archivo no tiene el formato correcto');
-                    }
-                    
-                    localStorage.setItem('citasDSSpa', JSON.stringify(citas));
-                    alert('Datos importados correctamente!');
-                    cargarCitas();
-                } catch (error) {
-                    alert('Error al importar datos: ' + error.message);
-                }
-            };
-            reader.readAsText(file);
-            
-            // Limpiar el input para permitir re-importar el mismo archivo
-            e.target.value = '';
         }
     </script>
 </body>
