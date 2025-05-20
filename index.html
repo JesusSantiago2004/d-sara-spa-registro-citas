@@ -340,7 +340,7 @@
             mostrarCitasEnTabla(citas);
             
             // Actualizar contador
-            document.getElementById('totalCitas').textContent = Total de citas: ${citas.length};
+            document.getElementById('totalCitas').textContent = `Total de citas: ${citas.length}`;
         }
 
         // Función para mostrar citas en la tabla
@@ -375,9 +375,9 @@
                     <td class="${claseEstado}">${cita.estado}</td>
                     <td>
                         ${cita.estado !== 'Confirmado' ? 
-                          <button class="btn btn-confirmar" data-id="${cita.id}">Confirmar</button> : ''}
+                          `<button class="btn btn-confirmar" data-id="${cita.id}">Confirmar</button>` : ''}
                         ${cita.estado !== 'Cancelado' ? 
-                          <button class="btn btn-cancelar" data-id="${cita.id}">Cancelar</button> : ''}
+                          `<button class="btn btn-cancelar" data-id="${cita.id}">Cancelar</button>` : ''}
                         <button class="btn btn-eliminar" data-id="${cita.id}">Eliminar</button>
                     </td>
                 `;
@@ -418,7 +418,7 @@
             localStorage.setItem('citasDSSpa', JSON.stringify(citas));
             cargarCitas();
             
-            alert(Cita ${nuevoEstado.toLowerCase()} con éxito);
+            alert(`Cita ${nuevoEstado.toLowerCase()} con éxito`);
         }
 
         // Función para eliminar una cita
@@ -438,7 +438,7 @@
         function formatearFecha(fechaStr) {
             if (!fechaStr) return '';
             const [anio, mes, dia] = fechaStr.split('-');
-            return ${dia}/${mes}/${anio};
+            return `${dia}/${mes}/${anio}`;
         }
 
         // Función para exportar a CSV
@@ -455,8 +455,8 @@
             
             // Datos
             citas.forEach(cita => {
-                csv += "${cita.id}","${cita.nombre}","${cita.telefono}","${cita.terapeuta}",;
-                csv += "${cita.servicio}","${cita.fecha}","${cita.hora}","${cita.estado}","${cita.fechaRegistro}"\n;
+                csv += `"${cita.id}","${cita.nombre}","${cita.telefono}","${cita.terapeuta}",`;
+                csv += `"${cita.servicio}","${cita.fecha}","${cita.hora}","${cita.estado}","${cita.fechaRegistro}"\n`;
             });
             
             // Crear archivo y descargar
@@ -464,7 +464,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.setAttribute('href', url);
-            link.setAttribute('download', citas_dsara_${new Date().toISOString().slice(0,10)}.csv);
+            link.setAttribute('download', `citas_dsara_${new Date().toISOString().slice(0,10)}.csv`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
