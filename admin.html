@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D'Sara Spa - Administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa-claro: #FFF0F5;
+            --rosa-pastel: #FFE6EE;
+            --rosa-intenso: #FF69B4;
+            --rosa-oscuro: #DB3D8F;
+            --rosa-borde: #FFB6C1;
+            --texto-principal: #5E2D45;
+            --texto-secundario: #9E3E6E;
+            --sombra: rgba(222, 120, 160, 0.2);
+            --blanco-rosado: #FFF9FB;
+            --verde: #4CAF50;
+            --rojo: #F44336;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--rosa-claro);
+            color: var(--texto-principal);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: var(--rosa-pastel);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--sombra);
+            border: 1px solid var(--rosa-borde);
+        }
+
+        h1 {
+            color: var(--rosa-oscuro);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--rosa-intenso), var(--rosa-oscuro));
+            border-radius: 3px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo img {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--rosa-oscuro);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: var(--blanco-rosado);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--rosa-borde);
+        }
+
+        th {
+            background-color: var(--rosa-intenso);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 182, 193, 0.2);
+        }
+
+        .estado-pendiente {
+            color: #FF9800;
+            font-weight: 500;
+        }
+
+        .estado-confirmado {
+            color: var(--verde);
+            font-weight: 500;
+        }
+
+        .estado-cancelado {
+            color: var(--rojo);
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-confirmar {
+            background-color: var(--verde);
+            color: white;
+            margin-right: 5px;
+        }
+
+        .btn-cancelar {
+            background-color: var(--rojo);
+            color: white;
+        }
+
+        .btn-eliminar {
+            background-color: var(--rojo);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .filtros select, .filtros input {
+            padding: 10px 15px;
+            border: 2px solid var(--rosa-borde);
+            border-radius: 10px;
+            background-color: var(--blanco-rosado);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .filtros button {
+            padding: 10px 20px;
+            background-color: var(--rosa-intenso);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .total-citas {
+            margin-top: 20px;
+            font-weight: 500;
+            color: var(--texto-secundario);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .filtros {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filtros select, .filtros input, .filtros button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            
+            .btn {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+            
+            .logo img {
+                max-width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="LOGO_SPA.jpg" alt="D'Sara Spa Logo">
+        </div>
+        <a href="index.html" class="back-link">← Volver al formulario de citas</a>
+        <h1>💖 Panel de Administración 💖</h1>
+        
+        <div class="filtros">
+            <select id="filtroEstado">
+                <option value="todos">Todos los estados</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Confirmado">Confirmado</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+            
+            <select id="filtroTerapeuta">
+                <option value="todos">Todos los terapeutas</option>
+                <option value="Natalia">Natalia</option>
+                <option value="Emi">Emi</option>
+                <option value="Lesly">Lesly</option>
+                <option value="Asmodea">Asmodea</option>
+            </select>
+            
+            <input type="date" id="filtroFecha">
+            
+            <button id="aplicarFiltros">Aplicar Filtros</button>
+            <button id="exportarCSV">Exportar a CSV</button>
+        </div>
+        
+        <table id="tablaCitas">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Terapeuta</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las citas se cargarán aquí con JavaScript -->
+            </tbody>
+        </table>
+        
+        <div class="total-citas" id="totalCitas">Total de citas: 0</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar citas al iniciar
+            cargarCitas();
+            
+            // Configurar eventos de filtros
+            document.getElementById('aplicarFiltros').addEventListener('click', cargarCitas);
+            document.getElementById('exportarCSV').addEventListener('click', exportarCSV);
+        });
+
+        // Función para cargar citas con filtros
+        function cargarCitas() {
+            const filtroEstado = document.getElementById('filtroEstado').value;
+            const filtroTerapeuta = document.getElementById('filtroTerapeuta').value;
+            const filtroFecha = document.getElementById('filtroFecha').value;
+            
+            let citas = JSON.parse(localStorage.getItem('citasDSSpa')) || [];
+            
+            // Aplicar filtros
+            if (filtroEstado !== 'todos') {
+                citas = citas.filter(cita => cita.estado === filtroEstado);
+            }
+            
+            if (filtroTerapeuta !== 'todos') {
+                citas = citas.filter(cita => cita.terapeuta === filtroTerapeuta);
+            }
+            
+            if (filtroFecha) {
+                citas = citas.filter(cita => cita.fecha === filtroFecha);
+            }
+            
+            // Ordenar por fecha de registro (más recientes primero)
+            citas.sort((a, b) => new Date(b.fechaRegistro) - new Date(a.fechaRegistro));
+            
+            // Mostrar en tabla
+            mostrarCitasEnTabla(citas);
+            
+            // Actualizar contador
+            document.getElementById('totalCitas').textContent = `Total de citas: ${citas.length}`;
+        }
+
+        // Función para mostrar citas en la tabla
+        function mostrarCitasEnTabla(citas) {
+            const tbody = document.querySelector('#tablaCitas tbody');
+            tbody.innerHTML = '';
+            
+            if (citas.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="9" style="text-align: center;">No hay citas registradas</td>';
+                tbody.appendChild(tr);
+                return;
+            }
+            
+            citas.forEach(cita => {
+                const tr = document.createElement('tr');
+                
+                // Determinar clase de estado
+                let claseEstado = '';
+                if (cita.estado === 'Pendiente') claseEstado = 'estado-pendiente';
+                if (cita.estado === 'Confirmado') claseEstado = 'estado-confirmado';
+                if (cita.estado === 'Cancelado') claseEstado = 'estado-cancelado';
+                
+                tr.innerHTML = `
+                    <td>${cita.id}</td>
+                    <td>${cita.nombre}</td>
+                    <td>${cita.telefono}</td>
+                    <td>${cita.terapeuta}</td>
+                    <td>${cita.servicio}</td>
+                    <td>${formatearFecha(cita.fecha)}</td>
+                    <td>${cita.hora}</td>
+                    <td class="${claseEstado}">${cita.estado}</td>
+                    <td>
+                        ${cita.estado !== 'Confirmado' ? 
+                          `<button class="btn btn-confirmar" data-id="${cita.id}">Confirmar</button>` : ''}
+                        ${cita.estado !== 'Cancelado' ? 
+                          `<button class="btn btn-cancelar" data-id="${cita.id}">Cancelar</button>` : ''}
+                        <button class="btn btn-eliminar" data-id="${cita.id}">Eliminar</button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            // Configurar eventos de botones
+            document.querySelectorAll('.btn-confirmar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    cambiarEstadoCita(parseInt(this.getAttribute('data-id')), 'Confirmado');
+                });
+            });
+            
+            document.querySelectorAll('.btn-cancelar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    cambiarEstadoCita(parseInt(this.getAttribute('data-id')), 'Cancelado');
+                });
+            });
+            
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    eliminarCita(parseInt(this.getAttribute('data-id')));
+                });
+            });
+        }
+
+        // Función para cambiar estado de una cita
+        function cambiarEstadoCita(id, nuevoEstado) {
+            let citas = JSON.parse(localStorage.getItem('citasDSSpa')) || [];
+            citas = citas.map(cita => {
+                if (cita.id === id) {
+                    return { ...cita, estado: nuevoEstado };
+                }
+                return cita;
+            });
+            
+            localStorage.setItem('citasDSSpa', JSON.stringify(citas));
+            cargarCitas();
+            
+            alert(`Cita ${nuevoEstado.toLowerCase()} con éxito`);
+        }
+
+        // Función para eliminar una cita
+        function eliminarCita(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+                let citas = JSON.parse(localStorage.getItem('citasDSSpa')) || [];
+                citas = citas.filter(cita => cita.id !== id);
+                
+                localStorage.setItem('citasDSSpa', JSON.stringify(citas));
+                cargarCitas();
+                
+                alert('Cita eliminada con éxito');
+            }
+        }
+
+        // Función para formatear fecha (YYYY-MM-DD a DD/MM/YYYY)
+        function formatearFecha(fechaStr) {
+            if (!fechaStr) return '';
+            const [anio, mes, dia] = fechaStr.split('-');
+            return `${dia}/${mes}/${anio}`;
+        }
+
+        // Función para exportar a CSV
+        function exportarCSV() {
+            let citas = JSON.parse(localStorage.getItem('citasDSSpa')) || [];
+            
+            if (citas.length === 0) {
+                alert('No hay citas para exportar');
+                return;
+            }
+            
+            // Encabezados CSV
+            let csv = 'ID,Nombre,Teléfono,Terapeuta,Servicio,Fecha,Hora,Estado,Fecha Registro\n';
+            
+            // Datos
+            citas.forEach(cita => {
+                csv += `"${cita.id}","${cita.nombre}","${cita.telefono}","${cita.terapeuta}",`;
+                csv += `"${cita.servicio}","${cita.fecha}","${cita.hora}","${cita.estado}","${cita.fechaRegistro}"\n`;
+            });
+            
+            // Crear archivo y descargar
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `citas_dsara_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
